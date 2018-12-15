@@ -72,7 +72,7 @@ envs:
       CDN_PREFIX: https://static.local.highdax.com
       WS_HOST: wss://wss.local.highdax.com
   # profile: local
-  native:
+  local:
     global:
       DOMAIN: highdax.com
       CONFIG_SERVER: http://127.0.0.1:8888
@@ -82,6 +82,7 @@ envs:
       REDIS_HOST: 127.0.0.1:6379
       DB_RW_HOST: 127.0.0.1
       DB_RO_HOST: 127.0.0.1
+      ELK_HOST: 127.0.0.1
     mq:
       JAVA_HOME: /usr/lib/jvm/java-8-openjdk-amd64
       ROCKETMQ_HOME: /srv/rocketmq

@@ -4,5 +4,5 @@
 
 - name: copy static resources for {{ app.name }}
   copy:
-    src: ../resources/
+    src: ../snapshot/resources/
     dest: /srv/cryptoexchange/{{ app.name }}-{{ app.timestamp }}
