@@ -1,0 +1,10 @@
+# init snapshot dir /data/spot-match-snapshot
+
+---
+
+- name: init snapshot dir /data/spot-match-snapshot
+  file:
+    path: /data/spot-match-snapshot/
+    state: directory
+    owner: www-data
+    group: www-data

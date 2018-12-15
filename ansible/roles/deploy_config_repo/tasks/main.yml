@@ -1,0 +1,12 @@
+# copy config repo for config server
+---
+
+- name: create config-repo dir /srv/config-repo
+  file:
+    path: /srv/config-repo
+    state: directory
+
+- name: copy config repo /config-repo/
+  copy:
+    src: ../config-repo/
+    dest: /srv/config-repo

@@ -1,0 +1,35 @@
+# init global var "app":
+#   app.name: app name like "sequence" which is the same as var "name".
+#   app.timestamp: string like "2018-01-02_17_20_59", used for deploy id.
+#   app.xmx: string like "1024" for maximum MB used for JVM.
+
+---
+
+- name: init var_timestamp by executing command
+  shell: date +%Y-%m-%d_%H_%M_%S
+  register: var_timestamp
+
+# calculate the maximum memory used by JVM: xmx = MAX(total * 0.75, total - 800MB)
+
+- name: init memory size
+  shell: grep MemTotal /proc/meminfo | awk '{x=int($2/1024*0.75);y=int($2/1024-800);print (x<y?y:x)}'
+  register: var_xmx
+
+- name: set var "xmx"
+  set_fact:
+    the_xmx: "{{ var_xmx.stdout }}"
+
+- name: set var "xmx" to 1G if profile is native
+  when: profile == 'native'
+  set_fact:
+    the_xmx: "1024"
+
+# set global var "app"
+
+- name: set global var "app"
+  set_fact:
+    app: "{{ apps[name]|combine({'name': name, 'xmx': the_xmx, 'timestamp': var_timestamp.stdout }) }}"
+
+- name: print global var "app"
+  debug: msg="{{ item.key }} = {{ item.value }}"
+  with_dict: "{{ app }}"

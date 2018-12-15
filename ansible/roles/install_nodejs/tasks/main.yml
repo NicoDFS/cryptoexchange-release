@@ -1,0 +1,7 @@
+# install nodejs
+
+---
+
+- name: install nodejs
+  apt:
+    name: nodejs

@@ -1,0 +1,18 @@
+# install filebeat
+
+---
+
+- name: download filebeat
+  get_url:
+    url: https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-6.3.2-amd64.deb
+    dest: /home/ubuntu/filebeat.deb
+    checksum: sha512:154eb2b25fe1d64abf6934bfc3937d38fff27cb327e9a21a3746b4e3d988bbc94fb18a357d1a80c74211a1a754c660d5eb5fe13600616f199baf6cf9941541b8
+
+- name: install filebeat
+  apt:
+    deb: /home/ubuntu/filebeat.deb
+
+- name: enable autostart
+  service:
+    name: filebeat
+    enabled: yes

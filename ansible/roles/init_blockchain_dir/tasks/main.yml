@@ -1,0 +1,10 @@
+# init blockchain data dir
+
+---
+
+- name: init blockchain data dir /data/blockchain
+  file:
+    path: /data/blockchain
+    state: directory
+    owner: www-data
+    group: www-data

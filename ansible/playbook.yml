@@ -1,0 +1,67 @@
+#
+# Deploy Highdax ALL-IN-ONE Script
+# For Ubuntu Server 16.04 ONLY!
+#
+# NOTE: manually add the following before run ansible:
+#
+# 1. add apt source for nodejs 10.x manually:
+#    $ curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+#
+# 2. add pgp key for openresty:
+#    $ wget -qO - https://openresty.org/package/pubkey.gpg | sudo apt-key add -
+#
+# 3. install python, redis, mysql:
+#    $ sudo apt-get install python software-properties-common redis-server mysql-server-5.7
+#
+# 4. add apt source for openresty:
+#    $ sudo add-apt-repository -y "deb http://openresty.org/package/ubuntu $(lsb_release -sc) main"
+#    $ sudo apt-get update
+#
+# valid deploy_type:
+#   jar: jar executable
+#   js: nodejs source
+#   mq: rocketmq binary
+#   www: openresty for www service
+#   (TODO) blockchain: block chain service
+
+---
+
+- hosts: "{{ name }}"
+  vars_files:
+    - environments/vars.yml
+  roles:
+    # init var "app" for app.name = xxx, app.deploy_type = xxx, app.xmx = xxx, ...
+    - { role: init_vars }
+
+    # init var "env" for env.ABC = xxx, env.XYZ = xxx, ...
+    - { role: init_env }
+
+    - { role: init_log_dir }
+    - { role: init_app_dir, when app.name != 'mq' }
+
+    - { role: init_snapshot_dir, when: profile == 'native' and app.name == 'spot-match' }
+
+    - { role: install_filebeat,  when: profile != 'native' and app.name != 'mq' and app.name != 'www' }
+    - { role: gen_filebeat_conf, when: profile != 'native' and app.name != 'mq' and app.name != 'www' }
+
+    - { role: deploy_ssl, when: app.name == 'www' or app.name == 'hd-cold-wallet' }
+
+    - { role: install_nginx,  when: app.deploy_type == 'blockchain' or app.name == 'hd-cold-wallet' }
+    - { role: gen_nginx_conf, when: app.deploy_type == 'blockchain' or app.name == 'hd-cold-wallet' }
+
+    - { role: install_openresty,  when: app.deploy_type == 'static' }
+    - { role: deploy_static,      when: app.deploy_type == 'static' }
+    - { role: gen_openresty_conf, when: app.deploy_type == 'static' }
+
+    - { role: install_jre,        when: app.deploy_type == 'jar' or app.deploy_type == 'mq' }
+    - { role: deploy_jar,         when: app.deploy_type == 'jar' }
+    - { role: deploy_mq,          when: app.deploy_type == 'mq' }
+    - { role: deploy_config_repo, when: profile == 'native' and app.name == 'config' }
+
+    - { role: install_nodejs, when: app.deploy_type == 'js' }
+    - { role: deploy_js,      when: app.deploy_type == 'js' }
+
+    - { role: update_symbol_link, when: app.deploy_type == 'jar' or app.deploy_type == 'js' or app.deploy_type == 'static' }
+
+    - { role: install_supervisor,  when: app.deploy_type == 'jar' or app.deploy_type == 'js' or app.deploy_type == 'mq' }
+    - { role: gen_supervisor_conf, when: app.deploy_type == 'jar' or app.deploy_type == 'js' or app.deploy_type == 'mq' }

@@ -1,0 +1,12 @@
+# copy nodejs source and run npm install
+---
+
+- name: copy nodejs source {{ app.name }}
+  copy:
+    src: ../snapshot/{{ app.name }}/
+    dest: /srv/cryptoexchange/{{ app.name }}-{{ app.timestamp }}
+
+- name: run npm to install modules
+  npm:
+    executable: /usr/bin/npm --unsafe-perm=true --allow-root
+    path: /srv/cryptoexchange/{{ app.name }}-{{ app.timestamp }}

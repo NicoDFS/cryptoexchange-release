@@ -1,0 +1,38 @@
+#
+# RocketMQ conf
+#
+
+[program:mq-namesrv]
+
+command      = java -Xms1g -Xmx1g -Xmn512m -cp /srv/rocketmq/conf -Djava.ext.dirs=/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext:/srv/rocketmq/lib -server -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=320m -XX:+UseConcMarkSweepGC -XX:+UseCMSCompactAtFullCollection -XX:CMSInitiatingOccupancyFraction=70 -XX:+CMSParallelRemarkEnabled -XX:SoftRefLRUPolicyMSPerMB=0 -XX:+CMSClassUnloadingEnabled -XX:SurvivorRatio=8 -XX:-UseParNewGC -XX:-OmitStackTraceInFastThrow -XX:-UseLargePages org.apache.rocketmq.namesrv.NamesrvStartup
+environment  = {% for k, v in env.items() %}{{ k }}="{{ v }}",{% endfor %}ENV="{{ profile }}"
+priority     = 100
+
+directory    = /srv/rocketmq
+user         = www-data
+startsecs    = 10
+startretries = 10
+
+redirect_stderr         = true
+stdout_logfile_maxbytes = 50MB
+stdout_logfile_backups  = 10
+stdout_logfile          = /var/log/supervisor/rocketmq-namesrv.log
+
+[program:mq-broker]
+
+command      = java -Xms{{ app.xmx }}m -Xmx{{ app.xmx }}m -Xmn{% set xmn = app.xmx|int %}{{ xmn // 2 }}m -cp /srv/rocketmq/conf -Djava.ext.dirs=/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext:/srv/rocketmq/lib -server -XX:+UseG1GC -XX:G1HeapRegionSize=16m -XX:G1ReservePercent=25 -XX:InitiatingHeapOccupancyPercent=30 -XX:SoftRefLRUPolicyMSPerMB=0 -XX:SurvivorRatio=8 -XX:-OmitStackTraceInFastThrow -XX:+AlwaysPreTouch -XX:MaxDirectMemorySize=2g -XX:-UseLargePages -XX:-UseBiasedLocking org.apache.rocketmq.broker.BrokerStartup -c /srv/rocketmq/conf/broker.conf
+environment  = {% for k, v in env.items() %}{{ k }}="{{ v }}",{% endfor %}ENV="{{ profile }}"
+priority     = 200
+
+directory    = /srv/rocketmq
+user         = www-data
+startsecs    = 10
+startretries = 10
+
+redirect_stderr         = true
+stdout_logfile_maxbytes = 50MB
+stdout_logfile_backups  = 10
+stdout_logfile          = /var/log/supervisor/rocketmq-broker.log
+
+[group:mq]
+programs=mq-namesrv,mq-broker

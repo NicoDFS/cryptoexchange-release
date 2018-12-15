@@ -1,0 +1,13 @@
+# generate filebeat conf
+
+---
+
+- name: generate filebeat conf
+  template:
+    src: templates/filebeat-{{ app.deploy_type }}.j2
+    dest: /etc/filebeat/filebeat.yml
+
+- name: restart filebeat
+  service:
+    name: filebeat
+    state: restarted

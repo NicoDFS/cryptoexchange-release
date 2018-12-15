@@ -1,0 +1,19 @@
+# init env and save into var "env"
+
+---
+
+- name: print global env
+  debug: msg="{{ item.key }}={{ item.value }}"
+  with_dict: "{{ envs[profile].global }}"
+
+- name: print app env
+  debug: msg="{{ item.key }}={{ item.value }}"
+  with_dict: "{{ envs[profile].get(app.name, {}) }}"
+
+- name: merge env and set as var "env"
+  set_fact:
+    env: "{{ envs[profile].global | combine( envs[profile].get(app.name, {}) ) }}"
+
+- name: print env
+  debug: msg="{{ item.key }}={{ item.value }}"
+  with_dict: "{{ env }}"

@@ -1,0 +1,7 @@
+# install java runtime
+
+---
+
+- name: install java 8 runtime
+  apt:
+    name: openjdk-8-jre-headless

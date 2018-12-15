@@ -1,0 +1,18 @@
+# generate nginx conf
+
+---
+
+- name: disable default conf
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: generate nginx conf for blockchain
+  template:
+    src: templates/nginx-{{ app.deploy_type }}.j2
+    dest: /etc/nginx/sites-enabled/{{ app.name }}
+
+- name: reload nginx
+  service:
+    name: nginx
+    state: reloaded

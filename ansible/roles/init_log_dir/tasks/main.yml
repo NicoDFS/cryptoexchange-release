@@ -1,0 +1,10 @@
+# init log dir
+
+---
+
+- name: init log dir /var/log/crypto/
+  file:
+    path: /var/log/crypto/
+    state: directory
+    owner: www-data
+    group: www-data

@@ -1,0 +1,101 @@
+# define global vars:
+
+---
+
+# app vars:
+apps:
+  api:
+    deploy_type: jar
+  config:
+    deploy_type: jar
+  hd-cold-wallet:
+    deploy_type: js
+  hd-hot-wallet:
+    deploy_type: jar
+  manage:
+    deploy_type: jar
+  mq:
+    deploy_type: mq
+  notification:
+    deploy_type: jar
+  sequence:
+    deploy_type: jar
+  quotation:
+    deploy_type: jar
+  clearing:
+    deploy_type: jar
+  spot-clearing:
+    deploy_type: jar
+  spot-match:
+    deploy_type: jar
+  www:
+    deploy_type: static
+  ui:
+    deploy_type: jar
+  btc:
+    deploy_type: blockchain
+    command: bitcoind -datadir=/data/blockchain -daemon=0 -printtoconsole -reindex -dbcache=1000 -maxmempool=500 -maxconnections=50 -disablewallet -server -rest -rpcbind=127.0.0.1 -rpcuser=bitcoin -rpcpassword=bitcoin -rpcallowip=127.0.0.1 -rpcport=8999
+  bch:
+    deploy_type: blockchain
+    command: bitcoind -datadir=/data/blockchain -daemon=0 -printtoconsole -reindex -dbcache=1000 -maxmempool=500 -maxconnections=50 -disablewallet -server -rest -rpcbind=127.0.0.1 -rpcuser=bitcoin -rpcpassword=bitcoin -rpcallowip=127.0.0.1 -rpcport=8999
+  eth:
+    deploy_type: blockchain
+    # command: geth --datadir /data/blockchain --nousb --syncmode full --gcmode=archive --cache 2048 --maxpeers 50 --rpc --rpcaddr 127.0.0.1 --rpcport 8999
+    command: /srv/parity/parity --no-download --mode=active --pruning=archive --cache-size-db=512 --auto-update=none --base-path=/data/blockchain --jsonrpc-port=8999 --jsonrpc-interface=127.0.0.1 --jsonrpc-hosts=all --no-ws
+  etc:
+    deploy_type: blockchain
+    command: geth --datadir /data/blockchain --cache 2048 --maxpeers 50 --rpc --rpcaddr 127.0.0.1 --rpcport 8999
+  ltc:
+    deploy_type: blockchain
+    command: litecoind -datadir=/data/blockchain -daemon=0 -printtoconsole -reindex -dbcache=1000 -maxmempool=500 -maxconnections=50 -disablewallet -server -rest -rpcbind=127.0.0.1 -rpcuser=bitcoin -rpcpassword=bitcoin -rpcallowip=127.0.0.1 -rpcport=8999
+  omni:
+    deploy_type: blockchain
+    command: omnicored -datadir=/data/blockchain -daemon=0 -printtoconsole -reindex -txindex -dbcache=1000 -maxmempool=500 -maxconnections=50 -disablewallet -server -rest -rpcbind=127.0.0.1 -rpcuser=bitcoin -rpcpassword=bitcoin -rpcallowip=127.0.0.1 -rpcport=8999
+
+# environments:
+envs:
+  # profile: native
+  native:
+    global:
+      DOMAIN: local.highdax.com
+      CONFIG_SERVER: http://127.0.0.1:8888
+      API_ENDPOINT: http://127.0.0.1:7001
+      UI_ENDPOINT: http://127.0.0.1:7000
+      NAMESRV_ADDR: 127.0.0.1:9876
+      REDIS_HOST: 127.0.0.1:6379
+      DB_RW_HOST: 127.0.0.1
+      DB_RO_HOST: 127.0.0.1
+    mq:
+      JAVA_HOME: /usr/lib/jvm/java-8-openjdk-amd64
+      ROCKETMQ_HOME: /srv/rocketmq
+    ui:
+      CDN_PREFIX: https://static.local.highdax.com
+      WS_HOST: wss://wss.local.highdax.com
+  # profile: production
+  production:
+    global:
+      DOMAIN: highdax.com
+      CONFIG_SERVER: http://127.0.0.1:8888
+      API_ENDPOINT: http://172.18.0.16:7001
+      UI_ENDPOINT: http://172.18.0.128:7000
+      NAMESRV_ADDR: 172.0.0.1:9876
+      REDIS_HOST: 127.0.0.1:6379
+      DB_RW_HOST: 127.0.0.1
+      DB_RO_HOST: 127.0.0.1
+      ENABLE_FOK: "true"
+      ENABLE_IOC: "true"
+      ENABLE_POST_ONLY: "true"
+      ENABLE_HIDDEN: "true"
+      ENABLE_STOP: "true"
+      ENABLE_STOP_LIMIT: "true"
+      ENABLE_TRAILING_STOP: "true"
+    config:
+      GIT_CONFIG_URL: https://git-repo-url
+      GIT_CONFIG_USERNAME: git
+      GIT_CONFIG_PASSWORD: changeit
+    mq:
+      JAVA_HOME: /usr/lib/jvm/java-8-openjdk-amd64
+      ROCKETMQ_HOME: /srv/rocketmq
+    ui:
+      CDN_PREFIX: https://static.highdax.com
+      WS_HOST: wss://wss.highdax.com

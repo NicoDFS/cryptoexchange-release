@@ -1,0 +1,39 @@
+# install openresty
+
+---
+
+- name: install openresty
+  apt:
+    name: openresty
+    allow_unauthenticated: yes
+
+- name: create dir /etc/openresty/script
+  file:
+    path: /etc/openresty/script
+    state: directory
+    owner: root
+    group: root
+
+- name: create dir /etc/openresty/conf.d
+  file:
+    path: /etc/openresty/conf.d
+    state: directory
+    owner: root
+    group: root
+
+- name: create dir /var/log/nginx
+  file:
+    path: /var/log/nginx/
+    state: directory
+    owner: www-data
+    group: www-data
+
+- name: add logratate
+  template:
+    src: templates/logrotate-openresty.j2
+    dest: /etc/logrotate.d/openresty
+
+- name: generate openresty nginx.j2
+  template:
+    src: templates/nginx.j2
+    dest: /etc/openresty/nginx.conf

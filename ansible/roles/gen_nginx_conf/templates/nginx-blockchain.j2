@@ -1,0 +1,28 @@
+#
+# Nginx conf for blockchain
+#
+
+server {
+
+    listen      80;
+    listen [::]:80;
+
+    server_name _;
+
+    keepalive_timeout    90;
+    client_max_body_size 1m;
+    sendfile             on;
+
+    root       /srv/cryptoexchange/empty;
+    access_log /var/log/nginx/blockchain_access_log;
+    error_log  /var/log/nginx/blockchain_error_log;
+
+    location / {
+        proxy_pass       http://127.0.0.1:8999;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Authorization "Basic Yml0Y29pbjpiaXRjb2lu";
+    }
+
+}

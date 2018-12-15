@@ -1,0 +1,8 @@
+# copy ssl certs
+
+---
+
+- name: copy ssl certificates for profile {{ profile }}
+  copy:
+    src: environments/{{ profile }}/ssl
+    dest: /srv/

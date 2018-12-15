@@ -1,0 +1,36 @@
+# file beat config:
+
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+
+filebeat.prospectors:
+- type: log
+  paths:
+    - /var/log/supervisor/supervisord.log
+  multiline.pattern: '^\d{4}-\d{2}-\d{2} '
+  multiline.negate: true
+  multiline.match: after
+- type: log
+  paths:
+    - /var/log/supervisor/blockchain.log
+  multiline.pattern: '^\d{4}-\d{2}-\d{2} '
+  multiline.negate: true
+  multiline.match: after
+  fields:
+    env: 'blockchain'
+    app: '{{ app.name }}'
+  fields_under_root: true
+
+processors:
+- add_cloud_metadata:
+- decode_json_fields:
+    fields: ['message']
+    target: ""
+    overwrite_keys: true
+
+output.elasticsearch:
+  hosts: ["{{ env.ELK_HOST }}"]
+  protocol: "https"
+  #username: "elastic"
+  #password: "changeme"

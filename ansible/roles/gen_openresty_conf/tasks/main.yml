@@ -1,0 +1,23 @@
+# generate openresty conf
+
+---
+
+- name: copy script auth_limit.lua
+  template:
+    src: templates/auth_limit.lua
+    dest: /etc/openresty/script/auth_limit.lua
+
+- name: copy script redis_limit.lua
+  template:
+    src: templates/redis_limit.lua
+    dest: /etc/openresty/script/redis_limit.lua
+
+- name: generate openresty-gateway.conf
+  template:
+    src: templates/openresty-gateway.j2
+    dest: /etc/openresty/conf.d/openresty-gateway.conf
+
+- name: reload openresty
+  service:
+    name: openresty
+    state: reloaded

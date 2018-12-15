@@ -1,0 +1,41 @@
+# deploy rocketmq
+
+---
+
+- name: remove old rocketmq binary
+  file:
+    path: /srv/rocketmq
+    state: absent
+
+- name: create rocketmq dir /srv/rocketmq
+  file:
+    path: /srv/rocketmq
+    state: directory
+
+- name: download rocketmq binary
+  get_url:
+    url: http://www-us.apache.org/dist/rocketmq/4.2.0/rocketmq-all-4.2.0-bin-release.zip
+    dest: /home/ubuntu/rocketmq.zip
+    checksum: sha1:ec0e8f874b87220d69e189257db8c09d1c7a6840
+
+- name: install unzip
+  apt:
+    name: unzip
+
+- name: unarchive rocketmq binary
+  unarchive:
+    src: /home/ubuntu/rocketmq.zip
+    dest: /srv/rocketmq/
+    remote_src: yes
+
+- name: copy rocketmq conf dir
+  copy:
+    src: environments/{{ profile }}/rocketmq/conf
+    dest: /srv/rocketmq
+
+- name: create rocketmq data dir /data/rocketmq/store
+  file:
+    path: /data/rocketmq/store
+    state: directory
+    owner: www-data
+    group: www-data

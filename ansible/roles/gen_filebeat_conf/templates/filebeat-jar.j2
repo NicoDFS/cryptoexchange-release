@@ -1,0 +1,47 @@
+# file beat config:
+
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+
+filebeat.prospectors:
+- type: log
+  paths:
+    - /var/log/supervisor/supervisord.log
+  multiline.pattern: '^\d{4}-\d{2}-\d{2} '
+  multiline.negate: true
+  multiline.match: after
+- type: log
+  paths:
+    - /var/log/crypto/crypto.log
+    - /var/log/crypto/metrics.log
+  multiline.pattern: '^\{'
+  multiline.negate: true
+  multiline.match: after
+  fields:
+    env: '{{ profile }}'
+    app: '{{ app.name }}'
+  scan_frequency: 1s
+  fields_under_root: true
+  queue.mem:
+    events: 12800
+    flush.min_events: 3200
+
+processors:
+- add_cloud_metadata:
+- decode_json_fields:
+    fields: ['message']
+    target: ""
+    overwrite_keys: true
+
+output.elasticsearch:
+  hosts: ["{{ env.ELK_HOST }}"]
+  protocol: "https"
+  pipelines:
+    - pipeline: decode_metrics
+      when.equals:
+        logger_name: "com.itranswarp.crypto.metrics.Metrics"
+  #username: "elastic"
+  #password: "changeme"
+  bulk_max_size: 3200
+  worker: 2
