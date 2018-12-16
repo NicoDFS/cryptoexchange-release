@@ -57,23 +57,6 @@ envs:
   # profile: native
   native:
     global:
-      DOMAIN: local.highdax.com
-      CONFIG_SERVER: http://127.0.0.1:8888
-      API_ENDPOINT: http://127.0.0.1:7001
-      UI_ENDPOINT: http://127.0.0.1:7000
-      NAMESRV_ADDR: 127.0.0.1:9876
-      REDIS_HOST: 127.0.0.1:6379
-      DB_RW_HOST: 127.0.0.1
-      DB_RO_HOST: 127.0.0.1
-    mq:
-      JAVA_HOME: /usr/lib/jvm/java-8-openjdk-amd64
-      ROCKETMQ_HOME: /srv/rocketmq
-    ui:
-      CDN_PREFIX: https://static.local.highdax.com
-      WS_HOST: wss://wss.local.highdax.com
-  # profile: local
-  local:
-    global:
       DOMAIN: highdax.com
       CONFIG_SERVER: http://127.0.0.1:8888
       API_ENDPOINT: http://127.0.0.1:7001
