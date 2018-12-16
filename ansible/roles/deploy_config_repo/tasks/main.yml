@@ -8,5 +8,5 @@
 
 - name: copy config repo /config-repo/
   copy:
-    src: ../config-repo/
+    src: ../snapshot/config-repo/
     dest: /srv/config-repo
