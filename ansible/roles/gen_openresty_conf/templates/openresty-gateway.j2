@@ -8,25 +8,25 @@
 
 upstream www_servers {
 {% for host in groups["ui"] %}
-    server {{ host }}:8000;
+    server {{ profile == 'native' ? 'localhost' : host }}:8000;
 {% endfor %}
 }
 
 upstream api_servers {
 {% for host in groups["api"] %}
-    server {{ host }}:8001;
+    server {{ profile == 'native' ? 'localhost' : host }}:8001;
 {% endfor %}
 }
 
 upstream notification_servers {
 {% for host in groups["notification"] %}
-    server {{ host }}:8005;
+    server {{ profile == 'native' ? 'localhost' : host }}:8005;
 {% endfor %}
 }
 
 upstream manage_servers {
 {% for host in groups["manage"] %}
-    server {{ host }}:8008;
+    server {{ profile == 'native' ? 'localhost' : host }}:8008;
 {% endfor %}
 }
 
@@ -38,11 +38,11 @@ server {
 
     listen      80;
 
-	server_name _;
+    server_name _;
 
-	location = /heartbeat {
-	    return 200 "heartbeat OK";
-	}
+    location = /heartbeat {
+        return 200 "heartbeat OK";
+    }
 }
 
 ###############################################################################
@@ -202,7 +202,17 @@ server {
 
     charset utf-8;
 
-    location / {
+    location ~ ^/v1/market {
+        proxy_pass       http://api_servers;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location ~ ^/v1 {
+        # FIXME: access_by_lua_file "/etc/openresty/script/auth_limit.lua";
+
         proxy_pass       http://api_servers;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
