@@ -7,31 +7,31 @@
 ###############################################################################
 
 upstream www_servers {
-  {% for host in groups["ui"] %}
+{% for host in groups["ui"] %}
     server {{ host }}:8000;
-  {% endfor %}
+{% endfor %}
 }
 
 upstream api_servers {
-  {% for host in groups["api"] %}
+{% for host in groups["api"] %}
     server {{ host }}:8001;
-  {% endfor %}
+{% endfor %}
 }
 
 upstream notification_servers {
-  {% for host in groups["notification"] %}
+{% for host in groups["notification"] %}
     server {{ host }}:8005;
-  {% endfor %}
+{% endfor %}
 }
 
 upstream manage_servers {
-  {% for host in groups["manage"] %}
+{% for host in groups["manage"] %}
     server {{ host }}:8008;
-  {% endfor %}
+{% endfor %}
 }
 
 ###############################################################################
-# heartbeat
+# heartbeat for ELB
 ###############################################################################
 
 server {
@@ -132,7 +132,6 @@ server {
 
     keepalive_timeout    90;
     client_max_body_size 1m;
-    sendfile             on;
 
     root       /srv/cryptoexchange/empty;
     access_log /var/log/nginx/ui_endpoint_access_log;
@@ -165,8 +164,6 @@ server {
     error_log  /var/log/nginx/api_http_error_log;
 
     charset utf-8;
-    charset_types application/json;
-    default_type application/json;
 
     location ~ ^/v1/market {
         proxy_pass       http://api_servers;
@@ -204,8 +201,6 @@ server {
     error_log  /var/log/nginx/api_endpoint_error_log;
 
     charset utf-8;
-    charset_types application/json;
-    default_type application/json;
 
     location / {
         proxy_pass       http://api_servers;
@@ -231,7 +226,7 @@ server {
     access_log /var/log/nginx/manage_http_access_log;
     error_log  /var/log/nginx/manage_http_error_log;
 
-    sendfile on;
+    charset utf-8;
 
     location / {
         proxy_pass       http://manage_servers;
@@ -274,6 +269,8 @@ server {
     error_log  /var/log/nginx/static_https_error_log;
 
     expires 100d;
+
+    charset utf-8;
 
     location / {
         if ($request_method = 'OPTIONS') {
@@ -323,6 +320,8 @@ server {
     access_log /var/log/nginx/www_https_access_log;
     error_log  /var/log/nginx/www_https_error_log;
 
+    charset utf-8;
+
     location / {
         proxy_pass       http://www_servers;
         proxy_set_header Host $host;
@@ -353,8 +352,6 @@ server {
     error_log  /var/log/nginx/api_https_error_log;
 
     charset utf-8;
-    charset_types application/json;
-    default_type application/json;
 
     location ~ ^/v1/market {
         proxy_pass       http://api_servers;
@@ -395,6 +392,8 @@ server {
 
     sendfile on;
 
+    charset utf-8;
+
     location / {
         proxy_pass       http://manage_servers;
         proxy_set_header Host $host;
@@ -421,6 +420,8 @@ server {
     root       /srv/cryptoexchange/empty;
     access_log /var/log/nginx/wss_access_log;
     error_log  /var/log/nginx/wss_error_log;
+
+    charset utf-8;
 
     location / {
         proxy_pass         http://notification_servers;
