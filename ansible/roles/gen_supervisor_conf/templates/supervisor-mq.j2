@@ -34,5 +34,21 @@ stdout_logfile_maxbytes = 50MB
 stdout_logfile_backups  = 10
 stdout_logfile          = /var/log/supervisor/rocketmq-broker.log
 
+[program:mq-console]
+
+command     = java -Xmx512m -jar rocketmq-console.jar
+environment = {% for k, v in env.items() %}{{ k }}="{{ v }}",{% endfor %}ENV="{{ profile }}"
+priority    = 300
+
+directory   = /srv/rocketmq
+user         = www-data
+startsecs    = 10
+startretries = 10
+
+redirect_stderr         = true
+stdout_logfile_maxbytes = 50MB
+stdout_logfile_backups  = 10
+stdout_logfile          = /var/log/supervisor/rocketmq-console.log
+
 [group:mq]
-programs=mq-namesrv,mq-broker
+programs=mq-namesrv,mq-broker,mq-console
