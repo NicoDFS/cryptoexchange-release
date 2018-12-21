@@ -28,6 +28,11 @@
     dest: /srv/rocketmq/
     remote_src: yes
 
+- name: upload rocketmq-console
+  copy:
+    src: ../snapshot/rocketmq/rocketmq-console.jar
+    dest: /srv/rocketmq/
+
 - name: copy rocketmq conf dir
   copy:
     src: environments/{{ profile }}/rocketmq/conf
