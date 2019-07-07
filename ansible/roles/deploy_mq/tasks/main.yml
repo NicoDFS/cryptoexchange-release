@@ -29,7 +29,7 @@
 
 - name: upload rocketmq-console
   copy:
-    src: ../snapshot/rocketmq/rocketmq-console.jar
+    src: binary/rocketmq-console.jar
     dest: /srv/rocketmq/
 
 - name: copy rocketmq conf dir
