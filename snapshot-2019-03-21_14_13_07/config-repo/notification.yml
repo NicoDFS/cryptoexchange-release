@@ -1,0 +1,10 @@
+# notification configuration:
+
+server:
+  port: 8005
+
+crypto:
+  notification:
+    api:
+      # API URL:
+      endpoint: ${API_ENDPOINT:http://localhost:8001}

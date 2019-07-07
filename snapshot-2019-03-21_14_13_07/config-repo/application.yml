@@ -1,0 +1,77 @@
+# application configuration:
+
+server:
+  tomcat:
+    use-forward-headers: true
+    protocol-header: x-forwarded-proto
+
+crypto:
+  setting:
+    # name of the exchange, default to "HighDAX":
+    name: ${EXCHANGE_NAME:HighDAX}
+    # IMPORTANT: exchange timezone, default to empty (default timezone, get by ZoneId.systemDefault()):
+    timezone: ${EXCHANGE_TIMEZONE:}
+    # IMPORTANT: global AES key, CANNOT be changed after set, MUST be exact 32 bytes:
+    aes-key: ${EXCHANGE_AES_KEY:CryptoExchangeAESRandomSecureKey}
+    # load exchange rate of CNY/USD, EUR/USD, ...
+    fex:
+      from-currency: USD
+      to-currencies: AUD, CAD, CNY, EUR, GBP, HKD, JPY, KRW, RUB, SGD, TWD
+      # TODO: change the following api-key to yours at https://www.alphavantage.co/support/#api-key
+      alphavantage-api-key: ${ALPHAVANTAGE_API_KEY:GV7BIQN1HIU1QKEG}
+    # set default fee:
+    fee:
+      default-maker-rate: 0.001
+      default-taker-rate: 0.002
+      # IMPORTANT: if set to true, the fee is always quote currency,
+      # e.g. BTC_USD will always charge USD when buy BTC:
+      always-charge-quote: ${ALWAYS_CHARGE_QUOTE:false}
+    web:
+      # the maximum size of HTTP post, default to 8K:
+      max-request-body-size: 8192
+  order:
+    features:
+      enable-fill-or-kill: ${ENABLE_FOK:false}
+      enable-immediate-or-cancel: ${ENABLE_IOC:false}
+      enable-post-only: ${ENABLE_POST_ONLY:false}
+      enable-hidden: ${ENABLE_HIDDEN:false}
+      enable-stop: ${ENABLE_STOP:false}
+      enable-stop-limit: ${ENABLE_STOP_LIMIT:false}
+      enable-trailing-stop: ${ENABLE_TRAILING_STOP:false}
+  messaging:
+    # RocketMQ name server address, default to "localhost:9876":
+    namesrv: ${NAMESRV_ADDR:localhost:9876}
+
+  storage:
+    # upload to storage: using "s3" or "static":
+    type: ${STORAGE_TYPE:static}
+    # if type is "s3", set following:
+    s3:
+      region: ${S3_REGION:ap-northeast-1}
+      api-key: ${S3_API_KEY:N/A}
+      api-secret: ${S3_API_SECRET:N/A}
+      timeout: ${S3_TIMEOUT:5000}
+      bucket: ${S3_BUCKET:sample}
+
+  mail:
+    # mail queue type: using "sns" or "memory"
+    type: ${MAIL_TYPE:memory}
+    # if type is "sns", set following:
+    sqs:
+      region: ${SQS_REGION:ap-northeast-1}
+      api-key: ${SQS_API_KEY:N/A}
+      api-secret: ${SQS_API_SECRET:N/A}
+      timeout: ${SQS_TIMEOUT:5000}
+      polling: ${SQS_POLLING:10000}
+      url: ${SQS_URL:https://ap-northeast-1.amazonaws.com/12345678/Sample}
+
+  # Redis configuration:
+  redis:
+    # Redis mode: single, cluster, elasticcache:
+    mode: ${REDIS_MODE:single}
+    # Redis node list:
+    nodes:
+      - "redis://${REDIS_HOST:localhost:6379}"
+      # - "redis://10.1.0.100:6379"
+      # - "redis://10.1.0.101:6379"
+      # - "redis://10.1.0.102:6379"

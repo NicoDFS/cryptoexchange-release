@@ -1,0 +1,52 @@
+# UI configuration:
+
+server:
+  port: 8000
+
+crypto:
+  setting:
+    load-symbols-from: api
+    load-symbols-url: /ui/trades
+  ui:
+    # CDN url prefix:
+    cdn-prefix: ${CDN_PREFIX:https://static.local.highdax.com}
+    ws:
+      # WebSocket server URL:
+      host: ${WS_HOST:wss://wss.local.highdax.com}
+    api:
+      # API URL:
+      endpoint: ${API_ENDPOINT:http://localhost:8001}
+    manage-request:
+      # internal keys used for internal api invocation:
+      api-key: ${MANAGE_UI_API_KEY:ManageToUIInternalKey}
+      api-secret: ${MANAGE_UI_API_SECRET:ManageToUIInternalSecret}
+    # configure redirect URL, e.g. redirect doc to "mydocs.zendesk.com":
+    redirect:
+      doc: ${REDIRECT_DOC:/?doc}
+      api: ${REDIRECT_API:/?api}
+      help: ${REDIRECT_HELP:/?help}
+      blog: ${REDIRECT_BLOG:/?blog}
+      tweeter: ${REDIRECT_TWEETER:/?tweeter}
+      telegram: ${REDIRECT_TELEGRAM:/?telegram}
+  # SMTP configuration:
+  smtp:
+    host: ${SMTP_HOST:localhost}
+    port: ${SMTP_PORT:465}
+    username: ${SMTP_USERNAME:user@localhost}
+    password: ${SMTP_PASSWORD:password}
+    from: ${SMTP_FROM:noreply@localhost}
+
+# datasource config:
+spring:
+  ui-rw-datasource:
+    url: jdbc:mysql://${DB_UI_RW_HOST:${DB_RW_HOST:localhost}}/ui?useSSL=false&characterEncoding=utf8
+    username: ${DB_UI_RW_USERNAME:ui_rw}
+    password: ${DB_UI_RW_PASSWORD:ui_rw_password}
+    driver-class-name: com.mysql.jdbc.Driver
+    hikari:
+      pool-name: HikariCP
+      auto-commit: false
+      connection-timeout: 5000
+      max-lifetime: 600000
+      maximum-pool-size: 10
+      minimum-idle: 2
