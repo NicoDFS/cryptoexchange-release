@@ -179,3 +179,20 @@ Visit: [https://manage.highdax.com](https://manage.highdax.com)
 Login: root@example.com
 Password: password
 
+# Start Bot
+
+Copy `bot` dir to `/home/ubuntu/` and run:
+
+```
+$ python3 bot.py
+
+base dir is set to: /home
+start bot for BTC_USDT, key = AAAADAWLis6FL1XXFWNDATMB, secret = 1P7qyd******...
+got price: 11221.5537027
+world price: 11221.5537027
+get orders...
+0 orders can be cancelled.
+place SELL_LIMIT at 11222.866629391057 ok? OK
+...
+```
+
