@@ -12,7 +12,7 @@ sys.path.append(os.path.join(basedir, 'build', 'sdk'))
 
 from sdk import ApiClient
 
-API_HOST = 'api.local.highdax.com'
+API_HOST = '127.0.0.1:8001'
 
 SYMBOLS_MAPPING = {
     'BTC_USDT': '1',
@@ -24,7 +24,7 @@ SLEEP = 0.2
 def main():
     num = 1
     host = API_HOST
-    https = True
+    https = False
     symbol = 'BTC_USDT'
     for arg in sys.argv:
         if arg.startswith('-host='):

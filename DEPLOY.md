@@ -168,3 +168,6 @@ ui                               RUNNING   pid 23431, uptime 0:00:13
 # Access HighDAX
 
 Visit: [https://www.highdax.com](https://www.highdax.com)
+
+Login: bot0@example.com ~ bot99@example.com
+Password: password
