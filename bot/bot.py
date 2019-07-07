@@ -19,7 +19,7 @@ SYMBOLS_MAPPING = {
     'ETH_USDT': '1027'
 }
 
-SLEEP = 0.2
+SLEEP = 2
 
 def main():
     num = 1
