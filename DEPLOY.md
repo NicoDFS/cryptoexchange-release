@@ -171,3 +171,11 @@ Visit: [https://www.highdax.com](https://www.highdax.com)
 
 Login: bot0@example.com ~ bot99@example.com
 Password: password
+
+# Access Management
+
+Visit: [https://manage.highdax.com](https://manage.highdax.com)
+
+Login: root@example.com
+Password: password
+
