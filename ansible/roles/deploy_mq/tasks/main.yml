@@ -12,11 +12,10 @@
     path: /srv/rocketmq
     state: directory
 
-- name: download rocketmq binary
-  get_url:
-    url: http://www-us.apache.org/dist/rocketmq/4.2.0/rocketmq-all-4.2.0-bin-release.zip
+- name: upload rocketmq binary
+  copy:
+    src: binary/rocketmq-all-4.2.0-bin-release.zip
     dest: /home/ubuntu/rocketmq.zip
-    checksum: sha1:ec0e8f874b87220d69e189257db8c09d1c7a6840
 
 - name: install unzip
   apt:
