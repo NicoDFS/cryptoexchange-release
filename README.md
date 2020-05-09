@@ -2,7 +2,7 @@
 
 The leading crypto currency exchange platform.
 
-![DEMO](https://github.com/michaelliao/cryptoexchange-release/raw/master/highdax.png)
+![DEMO](https://raw.githubusercontent.com/NicoDFS/cryptoexchange-release/master/highdax.png)
 
 Features:
 
